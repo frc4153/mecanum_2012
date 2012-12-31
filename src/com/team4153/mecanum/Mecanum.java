@@ -80,9 +80,41 @@ public class Mecanum extends SimpleRobot {
      * This function is called once each time the robot enters operator control.
      */
     public void operatorControl() {
-        while (isOperatorControl() && isEnabled()) {
-            System.out.println("X: " + stick1.getX() + " Y: " + stick1.getY() + " Twist: " + stick1.getTwist() + " Angle: " +  gyro.getAngle() );
-            drive.mecanumDrive_Cartesian(stick1.getX()/4, stick1.getY()/4, stick1.getTwist(), gyro.getAngle());
+        double x,y,twist,heading;
+	
+	while (isOperatorControl() && isEnabled()) {
+            x=stick1.getX()/4.0*-1.0; // invert left-right
+	    y=stick1.getY()/4.0;
+	    twist=stick1.getTwist()/3.0;
+	    heading=gyro.getAngle();
+	    System.out.println("X: " + x + " Y: " + y + " Twist: " + twist + " Angle: " + heading);
+            drive.mecanumDrive_Cartesian(x, y, twist, heading);
+	    msDelay(100);
         }
+    }
+    
+    /**
+     * Wait for the specified number of milliseconds.
+     * Delays the current thread for the specified period of time. Can not
+     * be interrupted (but it does preserve the interrupted state).
+     * @param period time to wait in ms
+     */
+    public static void msDelay(long period) {
+	if (period <= 0) {
+	    return;
+	}
+	long end = System.currentTimeMillis() + period;
+	boolean interrupted = false;
+	do {
+	    try {
+		Thread.sleep(period);
+	    } catch (InterruptedException ie) {
+		interrupted = true;
+	    }
+	    period = end - System.currentTimeMillis();
+	} while (period > 0);
+	if (interrupted) {
+	    Thread.currentThread().interrupt();
+	}
     }
 }
