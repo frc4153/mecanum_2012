@@ -64,6 +64,10 @@ public class Mecanum extends SimpleRobot {
         } catch (Exception any) {
             any.printStackTrace();
         }
+	
+	// test socket connection
+	CommTest theTest = new CommTest();
+	theTest.doTest();
     }
 
     /**
